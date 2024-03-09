@@ -8,10 +8,6 @@ Le mansioni sono collegate a informazioni aggiuntive associate al dipendente:
    - **tester**: è caratterizzato da un reparto e da un team di appartenza
    - **risorse umane**: è caratterizzato da una mansione
 
-**Table of Contents**
-
-[TOCM]
-
 Caratteristiche applicativo
 =============
 
