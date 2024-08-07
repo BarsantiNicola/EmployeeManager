@@ -1,73 +1,61 @@
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class EmployeeManager {
 	public static void main (String args[]) {
-		
-		String nome, cognome;
-		Scanner scan = new Scanner(System.in);
-		Dipendente organico[] = new Dipendente[50];
-		
-		
-		
-		for (int i=0; i < 50; i++) {
-			organico[i] = new Dipendente();
-		}
-		
-		organico[0].setNome("nunzio");
-		organico[0].setCognome("mannalà");
+		Scanner scan = new Scanner(System.in);		
+		HashMap<String, Dipendente> organico = new HashMap<String, Dipendente>();		
+		char c = ' ';
+		Dipendente init = new Dipendente("nome", "cognome", "6/9/98", "indirizzo@dominio.com", "123", "Dirigente", true);
+		String chiave = init.getNome().toLowerCase()+" "+init.getCognome().toLowerCase();
+		organico.put(chiave, init);
 				
-		//while(c != 'e') {
+	while(c != 'e') {
 			
-			//System.out.println(c);
-			System.out.println("Available commands:\n - Add Employee(a)\n - Search Employees(s)\n - Update Employee(u)\n - Delete Employee(d)\n - Exit(e)\n\nSelect Command:");
-			String command = scan.nextLine().toLowerCase();
-			char c = command.charAt(0);
-			System.out.println(c);
+		System.out.println("Available commands:\n - Add Employee(a)\n - Search Employees(s)\n - Update Employee(u)\n - Delete Employee(d)\n - Exit(e)\n\nSelect Command:");
+		String command = scan.nextLine().toLowerCase();
+		c = command.charAt(0);
 		
 		switch(c) {		
 			case 'a':
 				
 				System.out.print("Inserire il nome del dipendente:\t");
-				nome = scan.nextLine();
+				String nome = new String (scan.nextLine());
 				System.out.print("Inserire il cognome del dipendente:\t");
-				cognome = scan.nextLine();
+				String cognome = new String (scan.nextLine());
+								
 				
-				for (int i=0; i < 50; i++) {
-					if (organico[i].getNome() == null) {
-						for (int j=0; j<=i; j++) {
-						/*System.out.println(nome + " == " + organico[j].getNome().toLowerCase());
-						System.out.println(cognome + " == " + organico[j].getCognome().toLowerCase());
-						
-						System.out.print("nome == organico["+j+"].getNome(): ");
-						System.out.println(nome.toLowerCase() == organico[j].getNome().toLowerCase() );
-						System.out.println(organico[j].getNome() == null);
-						System.out.print("cognome == organico["+j+"].getCognome(): ");
-						System.out.println(cognome.toLowerCase() == organico[j].getCognome().toLowerCase() );
-						System.out.print("tutto: ");
-						System.out.println(nome.toLowerCase() == organico[j].getNome().toLowerCase() & cognome.toLowerCase() == organico[j].getCognome().toLowerCase());*/
-							//nome = organico[j].getNome();
-							//cognome = organico[j].getCognome();
-							System.out.print(nome + "!=" + organico[j].getNome() + ":\t\t");
-							System.out.println(nome != organico[j].getNome() );
-							System.out.print(cognome + "!=" + organico[j].getCognome() + ":\t");
-							System.out.println(cognome != organico[j].getCognome());
-						
-							if (nome == organico[j].getNome() & cognome == organico[j].getCognome()) {
-								System.out.println("Già registrato");
-								break;
-							} else {
-								System.out.println("Nome registrato con successo al posto " + i + "!");
-								organico[i].setNome(nome);
-								organico[i].setCognome(cognome);
-								break;	
-							}
-						}
-						break;
-					}
-					
+				if (organico.containsKey(nome.toLowerCase() + " " + cognome.toLowerCase())) {
+					System.out.println("Dipendente già presente");
+					break;
+				} else {
+					System.out.println("Nuovo dipendente!\t");
+					System.out.print("Inserire la data di nascita:\t");
+					String dob = new String(scan.nextLine());
+					System.out.print("Inserire l'indirizzo email:\t");
+					String email = new String (scan.nextLine());
+					System.out.print("Inserire il numero di telefono:\t");
+					String tel = new String (scan.nextLine());
+					System.out.print("Inserire la mansione:\t");
+					String mansione = new String (scan.nextLine());
+					System.out.print("Specificare se è un tester (sì/no):\t");
+					String t = new String (scan.nextLine());
+					boolean tester = false;
+					if (t.toLowerCase().equals("sì") || t.toLowerCase().equals("si"))  tester = true;					
+					Dipendente temp = new Dipendente(nome, cognome, dob, email, tel, mansione, tester);
+					organico.put(nome.toLowerCase() + " " + cognome.toLowerCase(), temp);
+					clearConsole();
+					break;
 				}
 			case 's':
-				System.out.println("Immettere l'attributo sul quale fare la ricerca fra:\n Nome\t\tCognome\t\tData di nascita\t\tEmail\t\tNumero telefonico");
+				
+				if (organico.isEmpty()) {
+					clearConsole();
+					System.out.println("La lista è vuota");
+					break;
+				}
+				
+				System.out.println("Immettere l'attributo sul quale fare la ricerca fra:\n Nome\t\tCognome\t\tData di nascita\t\tEmail\t\tNumero telefonico\t\tMansione");
 				String query = scan.nextLine();
 				
 				switch (query.toLowerCase()){
@@ -75,60 +63,61 @@ public class EmployeeManager {
 					case "nome":
 						System.out.print("Digitare il nome:\t");
 						String name = scan.nextLine();
-						for (Dipendente dip : organico) {
-							//System.out.println(dip.getNome() == name);
-							if (dip.getNome() == name) {
-								System.out.print("Ecco il risultato della ricerca: ");
-								System.out.println(dip.dettagli());
-							} else System.out.println("è tutto rotto"); break;
+						for (Dipendente dip : organico.values()) {
+	                        if (dip.getNome().toLowerCase().equals(name.toLowerCase())) {
+	                        	stampaInformazioni(dip);
+	                        } else clearConsole();
 						}
 						break;
 					case "cognome":
 						System.out.print("Digitare il cognome:\t");
-						String surname = scan.nextLine();
-						for (Dipendente dip : organico) {
-							//System.out.println(dip.getNome() == name);
-							if (dip.getCognome() == surname) {
-								System.out.print("Ecco il risultato della ricerca: ");
-								System.out.println(dip.dettagli());
-							}
+						String surname = scan.nextLine();						
+						for (Dipendente dip : organico.values()) {
+	                        if (dip.getCognome().toLowerCase().equals(surname.toLowerCase())) {
+	                        	stampaInformazioni(dip);
+	                        } else clearConsole();
 						}
 						break;
 					case "data di nascita":
-						System.out.print("Digitare la data di nascita:\t");
+						System.out.print("Digitare la data di nascita (gg/mm/yy):\t");
 						String dob = scan.nextLine();
-						for (Dipendente dip : organico) {
-							//System.out.println(dip.getNome() == name);
-							if (dip.getDob() == dob) {
-								System.out.print("Ecco il risultato della ricerca: ");
-								System.out.println(dip.dettagli());
-							}
+						for (Dipendente dip : organico.values()) {
+	                        if (dip.getDob().toLowerCase().equals(dob.toLowerCase())) {
+	                        	stampaInformazioni(dip);
+	                        } else clearConsole();
 						}
 						break;
 					case "email":
 						System.out.print("Digitare l'indirizzo email:\t");
-						String email = scan.nextLine();
-						for (Dipendente dip : organico) {
-							//System.out.println(dip.getNome() == name);
-							if (dip.getEmail() == email) {
-								System.out.print("Ecco il risultato della ricerca: ");
-								System.out.println(dip.dettagli());
-							}
+						String email = scan.nextLine();						
+						for (Dipendente dip : organico.values()) {
+	                        if (dip.getEmail().toLowerCase().equals(email.toLowerCase())) {
+	                        	stampaInformazioni(dip);
+	                        } else clearConsole();
 						}
 						break;
 					case "numero telefonico":
 						System.out.print("Digitare il numero telefonico:\t");
-						String num = scan.nextLine();
-						for (Dipendente dip : organico) {
-							//System.out.println(dip.getNome() == name);
-							if (dip.getNumTel() == num) {
-								System.out.print("Ecco il risultato della ricerca: ");
-								System.out.println(dip.dettagli());
-							}
+						String num = scan.nextLine();						
+						for (Dipendente dip : organico.values()) {
+	                        if (dip.getNumTel().toLowerCase().equals(num.toLowerCase())) {
+	                        	stampaInformazioni(dip);
+	                        } else clearConsole();
 						}
-						break;		
-				}				
-				break;
+						break;
+					case "mansione":
+						System.out.print("Digitare la mansione:\t");
+						String mansione = scan.nextLine();						
+						for (Dipendente dip : organico.values()) {
+	                        if (dip.getMansione().toLowerCase().equals(mansione.toLowerCase())) {
+	                        	stampaInformazioni(dip);
+	                        } else clearConsole();
+						}
+						break;
+					default: 
+						clearConsole();
+						System.out.println("Input non corretto, riprovare");
+				}
 			case 'u':
 				
 
@@ -136,13 +125,32 @@ public class EmployeeManager {
 				break;
 			case 'd':
 				
-
-				
+				System.out.print("Digitare il nome e il cognome del dipendente da eliminare separati da uno spazio:\t");
+				String key = scan.nextLine().toLowerCase();				
+				if (organico.containsKey(key)) {
+					organico.remove(key);
+					clearConsole();
+					break;
+				} else System.out.println("Il dipendente non esiste");
 				break;
 			case 'e':
-				break;	
+				break;
+				
+			default:
+				clearConsole();
+				System.out.println("Input non corretto, riprovare");
 		}
 	}	
+} //FINE MAIN
+	public static void clearConsole() {
+	    for (int i = 0; i < 50; i++) {
+	        System.out.println();
+	    }
+	}
+	
+	public static void stampaInformazioni(Dipendente dip) {
+		clearConsole();
+		System.out.println(dip.dettagli());
+	}
 }
-//}
 

@@ -6,17 +6,21 @@ public class Dipendente {
 	private String dob;
 	private String email;
 	private String numTel;
+	private String mansione;
+	private boolean tester;
 	
 	public Dipendente() {
 		
 	}
 	
-	public Dipendente(String nome, String cognome, String dob, String email, String numTel) {
+	public Dipendente(String nome, String cognome, String dob, String email, String numTel, String mansione, boolean tester) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dob = dob;
 		this.email = email;
 		this.numTel = numTel;
+		this.mansione = mansione;
+		this.tester = tester;
 	}
 	
 	public void setNome(String nome) {
@@ -59,7 +63,26 @@ public class Dipendente {
 		return dob;
 	}
 	
+	public void setMansione(String mansione) {
+		this.mansione = mansione;
+	}
+	
+	public String getMansione() {
+		return mansione;
+	}
+	/*
+	public void setTester(String tester) {
+		this.tester = false;
+		if (tester.toLowerCase().equals("sì"))  this.tester = true; 
+	}
+	*/
+	public String getTester() {
+		if (this.tester) {
+			return "ed è un tester";
+		} else return " ";
+	}
+	
 	public String dettagli() {
-		return ("Nome: "+ this.getNome() + "\tCognome: "+ this.getCognome() + "\tData di nascita: " + this.getDob()  + "\tEmail: " + this.getEmail() + "\tNumero Telefonico" + this.getNumTel());
+		return ("Nome: "+ this.getNome() + "\tCognome: "+ this.getCognome() + "\tData di nascita: " + this.getDob()  + "\tEmail: " + this.getEmail() + "\tNumero Telefonico: " + this.getNumTel() + "\tMansione: " + this.getMansione() + ", " + getTester());
 	}
 }
