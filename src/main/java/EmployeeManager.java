@@ -150,6 +150,8 @@ public class EmployeeManager {
 						System.out.print("Digitare il cognome:\t");
 						String surname = scan.nextLine();						
 						organico.get(key).setCognome(surname);
+						organico.put(chiave(organico.get(key).getNome(), surname), organico.get(key));
+						organico.remove(key);
 						break;
 					case "data di nascita":
 						System.out.print("Digitare la data di nascita (gg/mm/yy):\t");
