@@ -1,3 +1,4 @@
+package esercizio.models;
 
 public class Dipendente {
 	
@@ -6,20 +7,20 @@ public class Dipendente {
 	private String dob;
 	private String email;
 	private String numTel;
-	private String mansione;
+	private String ruolo;
 	private boolean tester;
 	
 	public Dipendente() {
 		
 	}
 	
-	public Dipendente(String nome, String cognome, String dob, String email, String numTel, String mansione, boolean tester) {
+	public Dipendente(String nome, String cognome, String dob, String email, String numTel, String ruolo, boolean tester) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dob = dob;
 		this.email = email;
 		this.numTel = numTel;
-		this.mansione = mansione;
+		this.ruolo = ruolo;
 		this.tester = tester;
 	}
 	
@@ -63,12 +64,12 @@ public class Dipendente {
 		return dob;
 	}
 	
-	public void setMansione(String mansione) {
-		this.mansione = mansione;
+	public void setRuolo(String ruolo) {
+		this.ruolo = ruolo;
 	}
 	
-	public String getMansione() {
-		return mansione;
+	public String getRuolo() {
+		return ruolo;
 	}
 	/*
 	public void setTester(String tester) {
@@ -78,11 +79,11 @@ public class Dipendente {
 	*/
 	public String getTester() {
 		if (this.tester) {
-			return "ed è un tester";
+			return ", ed è un tester";
 		} else return " ";
 	}
 	
 	public String dettagli() {
-		return ("Nome: "+ this.getNome() + "\tCognome: "+ this.getCognome() + "\tData di nascita: " + this.getDob()  + "\tEmail: " + this.getEmail() + "\tNumero Telefonico: " + this.getNumTel() + "\tMansione: " + this.getMansione() + ", " + getTester());
+		return ("Nome: "+ this.getNome() + "\tCognome: "+ this.getCognome() + "\tData di nascita: " + this.getDob()  + "\tEmail: " + this.getEmail() + "\tNumero Telefonico: " + this.getNumTel() + "\truolo: " + this.getRuolo() + getTester());
 	}
 }

@@ -1,9 +1,14 @@
+package esercizio.models;
 
-public class Sviluppatore extends Dipendente{
+public class Tester extends Dipendente {
 	
 	private String reparto;
 	private short IDTeam;
-	private String linguaggio;
+	
+	public Tester(String nome, String cognome, String dob, String email, String numTel, String ruolo, boolean tester, String reparto, short IDTeam) {
+		this.reparto = reparto;
+		this.IDTeam = IDTeam;
+	}
 	
 	public void setReparto(String reparto) {
 		this.reparto = reparto;
@@ -19,14 +24,6 @@ public class Sviluppatore extends Dipendente{
 	
 	public short getIDTeam() {
 		return IDTeam;
-	}
-	
-	public void setLinguaggio(String linguaggio) {
-		this.linguaggio = linguaggio;
-	}
-	
-	public String getsetLinguaggio() {
-		return linguaggio;
 	}
 	
 }
