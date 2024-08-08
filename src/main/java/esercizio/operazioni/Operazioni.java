@@ -6,9 +6,7 @@ import java.util.Scanner;
 import esercizio.models.*;
 
 public class Operazioni {
-
 	static HashMap<String, Dipendente> organico = new HashMap<String, Dipendente>();
-	static HashMap<String, Dipendente> result = new HashMap<String, Dipendente>();
 	static Scanner scan = new Scanner(System.in);
 
 	public static void Add() {
@@ -78,8 +76,9 @@ public class Operazioni {
 
 	}
 
-	public static HashMap Search(String query, HashMap<String, Dipendente> organico) {
+	public static HashMap<String, Dipendente> Search(String query, HashMap<String, Dipendente> organico) {
 		
+		HashMap<String, Dipendente> result = new HashMap<String, Dipendente>();
 		boolean check = false;
 
 		if (organico.isEmpty()) {
@@ -97,11 +96,11 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getNome().toLowerCase().equals(name.toLowerCase())) {
-							// System.out.println(dip.toString());
 							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 
 						}
 					}
+					// System.out.println(result);
 					check = true;
 					break;
 				case "cognome":
@@ -110,9 +109,11 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getCognome().toLowerCase().equals(surname.toLowerCase())) {
+							// System.out.println(dip.toString());
 							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
+					// System.out.println(result);
 					check = true;
 					break;
 				case "data di nascita":
@@ -248,6 +249,8 @@ public class Operazioni {
 				}
 			}
 		}
+		System.out.println(organico);
+		System.out.println(result);
 		return result;
 	}
 
@@ -402,13 +405,8 @@ public class Operazioni {
 			System.out.println();
 		}
 	}
-	
-	public static HashMap<String, Dipendente> getOrganico(){
+
+	public static HashMap<String, Dipendente> getOrganico() {
 		return organico;
 	}
-	
-	public static HashMap<String, Dipendente> getResult(){
-		return result;
-	}
-
 }
