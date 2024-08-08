@@ -38,7 +38,7 @@ public class Sviluppatore extends Dipendente{
 	}
 	
 	@Override
-	public String dettagli() {
+	public String toString() {
 		return ("Nome: "+ this.getNome() + "\tCognome: "+ this.getCognome() + "\tData di nascita: " + this.getDob()  + "\tEmail: " + this.getEmail() + "\tNumero Telefonico: " + this.getNumTel() + "\truolo: " + this.getRuolo() + "\treparto: " + this.getReparto() + "\tTeam: " + this.getIDTeam() + "\tLinguaggio: " + this.getLinguaggio() + getTester());
 	}
 	

@@ -17,7 +17,12 @@ public class EmployeeManager {
 					Operazioni.Add();
 					break;
 				case 's': // SEARCH
-					Operazioni.Search();
+					String search = new String();
+					do {						
+						Operazioni.Search();						
+						System.out.println("Effettuare una nuova ricerca?");
+						search = new String(scan.nextLine());						
+					}while(search.equals("sì") | search.equals("si"));
 					break;
 				case 'u': // UPDATE
 					Operazioni.Update();
