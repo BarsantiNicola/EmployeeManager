@@ -8,6 +8,7 @@ import esercizio.models.*;
 public class Operazioni {
 
 	static HashMap<String, Dipendente> organico = new HashMap<String, Dipendente>();
+	static HashMap<String, Dipendente> result = new HashMap<String, Dipendente>();
 	static Scanner scan = new Scanner(System.in);
 
 	public static void Add() {
@@ -77,8 +78,8 @@ public class Operazioni {
 
 	}
 
-	public static void Search() {
-
+	public static HashMap Search(String query, HashMap<String, Dipendente> organico) {
+		
 		boolean check = false;
 
 		if (organico.isEmpty()) {
@@ -88,9 +89,6 @@ public class Operazioni {
 		} else {
 
 			while (!check) {
-				System.out.println(
-						"Immettere l'attributo sul quale fare la ricerca fra:\n Nome\t\tCognome\t\tData di nascita\t\tEmail\t\tNumero telefonico\t\tRuolo\t\tReparto\t\tID Team\t\tResponsabilità\t\tLinguaggio\t\tMansione");
-				String query = scan.nextLine();
 				switch (query.toLowerCase()) {
 
 				case "nome":
@@ -99,7 +97,9 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getNome().toLowerCase().equals(name.toLowerCase())) {
-							System.out.println(dip.toString());
+							// System.out.println(dip.toString());
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
+
 						}
 					}
 					check = true;
@@ -110,7 +110,7 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getCognome().toLowerCase().equals(surname.toLowerCase())) {
-							System.out.println(dip.toString());
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
 					check = true;
@@ -121,7 +121,7 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getDob().toLowerCase().equals(dob.toLowerCase())) {
-							System.out.println(dip.toString());
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
 					check = true;
@@ -132,7 +132,7 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getEmail().toLowerCase().equals(email.toLowerCase())) {
-							System.out.println(dip.toString());
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
 					check = true;
@@ -143,7 +143,7 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getNumTel().toLowerCase().equals(num.toLowerCase())) {
-							System.out.println(dip.toString());
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
 					check = true;
@@ -154,7 +154,7 @@ public class Operazioni {
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getRuolo().toLowerCase().equals(ruolo.toLowerCase())) {
-							System.out.println(dip.toString());
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
 					check = true;
@@ -167,12 +167,12 @@ public class Operazioni {
 						if (dip instanceof Dirigente) {
 							Dirigente dir = (Dirigente) dip;
 							if (dir.getReparto().toLowerCase().equals(reparto.toLowerCase())) {
-								System.out.println(dir.toString());
+								result.put(chiave(dir.getNome().toLowerCase(), dir.getCognome().toLowerCase()), dir);
 							}
 						} else if (dip instanceof Sviluppatore) {
 							Sviluppatore dev = (Sviluppatore) dip;
 							if (dev.getReparto().toLowerCase().equals(reparto.toLowerCase())) {
-								System.out.println(dev.toString());
+								result.put(chiave(dev.getNome().toLowerCase(), dev.getCognome().toLowerCase()), dev);
 							}
 						}
 					}
@@ -187,12 +187,12 @@ public class Operazioni {
 						if (dip instanceof Dirigente) {
 							Dirigente dir = (Dirigente) dip;
 							if (dir.getIDTeam() == id) {
-								System.out.println(dir.toString());
+								result.put(chiave(dir.getNome().toLowerCase(), dir.getCognome().toLowerCase()), dir);
 							}
 						} else if (dip instanceof Sviluppatore) {
 							Sviluppatore dev = (Sviluppatore) dip;
 							if (dev.getIDTeam() == id) {
-								System.out.println(dev.toString());
+								result.put(chiave(dev.getNome().toLowerCase(), dev.getCognome().toLowerCase()), dev);
 							}
 						}
 					}
@@ -207,7 +207,7 @@ public class Operazioni {
 						if (dip instanceof Dirigente) {
 							Dirigente dir = (Dirigente) dip;
 							if (dir.getResponsabilita() == resp) {
-								System.out.println(dir.toString());
+								result.put(chiave(dir.getNome().toLowerCase(), dir.getCognome().toLowerCase()), dir);
 							}
 						}
 					}
@@ -221,7 +221,7 @@ public class Operazioni {
 						if (dip instanceof Sviluppatore) {
 							Sviluppatore dev = (Sviluppatore) dip;
 							if (dev.getLinguaggio().toLowerCase().equals(linguaggio.toLowerCase())) {
-								System.out.println(dev.toString());
+								result.put(chiave(dev.getNome().toLowerCase(), dev.getCognome().toLowerCase()), dev);
 							}
 						}
 					}
@@ -235,7 +235,7 @@ public class Operazioni {
 						if (dip instanceof RisorseUmane) {
 							RisorseUmane hr = (RisorseUmane) dip;
 							if (hr.getMansione().toLowerCase().equals(mansione.toLowerCase())) {
-								System.out.println(hr.toString());
+								result.put(chiave(hr.getNome().toLowerCase(), hr.getCognome().toLowerCase()), hr);
 							}
 						}
 					}
@@ -248,6 +248,7 @@ public class Operazioni {
 				}
 			}
 		}
+		return result;
 	}
 
 	public static void Update() {
@@ -264,7 +265,7 @@ public class Operazioni {
 			if (organico.containsKey(key)) {
 
 				do {
-					
+
 					System.out.println("\n" + organico.get(key).toString() + "\n");
 					System.out.println(
 							"Immettere l'attributo da modificare fra:\n Nome\t\tCognome\t\tData di nascita\t\tEmail\t\tNumero telefonico\t\tRuolo");
@@ -278,9 +279,8 @@ public class Operazioni {
 						String prevKey = new String(key);
 						organico.get(prevKey).setNome(name);
 						key = chiave(name, organico.get(prevKey).getCognome());
-						organico.put(key, organico.get(prevKey));						
+						organico.put(key, organico.get(prevKey));
 						organico.remove(prevKey);
-						
 						break;
 
 					case "cognome":
@@ -289,7 +289,7 @@ public class Operazioni {
 						prevKey = new String(key);
 						organico.get(prevKey).setCognome(surname);
 						key = chiave(organico.get(prevKey).getNome(), surname);
-						organico.put(key, organico.get(prevKey));						
+						organico.put(key, organico.get(prevKey));
 						organico.remove(prevKey);
 						break;
 
@@ -401,6 +401,14 @@ public class Operazioni {
 		for (int i = 0; i < 50; i++) {
 			System.out.println();
 		}
+	}
+	
+	public static HashMap<String, Dipendente> getOrganico(){
+		return organico;
+	}
+	
+	public static HashMap<String, Dipendente> getResult(){
+		return result;
 	}
 
 }
