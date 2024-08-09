@@ -6,7 +6,8 @@ public class Dirigente extends Dipendente {
 	private short IDTeam;
 	private byte responsabilita;
 
-	public Dirigente(String nome, String cognome, String dob, String email, String numTel, String ruolo, boolean tester, String reparto, short IDTeam, byte responsabilita) {
+	public Dirigente(String nome, String cognome, String dob, String email, String numTel, String ruolo, String reparto,
+			short IDTeam, byte responsabilita, boolean tester) {
 		super(nome, cognome, dob, email, numTel, ruolo, tester);
 		this.reparto = reparto;
 		this.IDTeam = IDTeam;
@@ -39,7 +40,10 @@ public class Dirigente extends Dipendente {
 
 	@Override
 	public String toString() {
-		return ("Nome: " + this.getNome() + "\tCognome: " + this.getCognome() + "\tData di nascita: " + this.getDob() + "\tEmail: " + this.getEmail() + "\tNumero Telefonico: " + this.getNumTel() + "\truolo: " + this.getRuolo() + "\treparto: " + this.getReparto() + "\tTeam: " + this.getIDTeam() + "\tResponsabilità: " + this.getResponsabilita() + getTester());
+		return ("Name: " + this.getNome() + "\tSurname: " + this.getCognome() + "\tDate of birth: " + this.getDob()
+				+ "\tEmail: " + this.getEmail() + "\tPhone number: " + this.getNumTel() + "\tOccupation: "
+				+ this.getRuolo() + "\tDepartment: " + this.getReparto() + "\tTeam ID: " + this.getIDTeam()
+				+ "\tResponsibility: " + this.getResponsabilita() + "\tTester: " + this.getTester());
 	}
 
 }

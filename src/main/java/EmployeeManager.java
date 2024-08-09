@@ -24,26 +24,21 @@ public class EmployeeManager {
 					Operazioni.Add();
 					break;
 				case 's': // SEARCH
-					String check = new String("sì");
-					//prevRisultato.clear();
-					//risultato.clear();
-					
-					risultato = (HashMap)Operazioni.getOrganico().clone();
+					String check = new String("sì");					
+					risultato = (HashMap<String, Dipendente>)Operazioni.getOrganico().clone();
 					while (check.toLowerCase().equals("sì") || check.toLowerCase().equals("si")) {
 						System.out.println(
-								"Immettere l'attributo sul quale fare la ricerca fra:\n Nome\t\tCognome\t\tData di nascita\t\tEmail\t\tNumero telefonico\t\tRuolo\t\tReparto\t\tID Team\t\tResponsabilità\t\tLinguaggio\t\tMansione");
+								"Type the attribute in order to search among:\n Name\t\tSurname\t\tDate of birth\t\tEmail\t\tPhone number\t\tOccupation\t\tDepartment\t\tTeam ID\t\tResponsibility\t\tLanguage\t\tTask\t\tTester\n");
 						String query = scan.nextLine();
-						prevRisultato = (HashMap)risultato.clone();
-						risultato = (HashMap)Operazioni.Search(query, prevRisultato).clone();
-						for(Dipendente dip : risultato.values()) {
-							dip.toString();
-						}
-						System.out.println("Effettuare una nuova ricerca?");
+						prevRisultato = (HashMap<String, Dipendente>)risultato.clone();
+						risultato = (HashMap<String, Dipendente>)Operazioni.Search(query, prevRisultato).clone();
+						System.out.print("Keep searching?\t");
 						check = new String(scan.nextLine());
-						
+						Operazioni.clearConsole();
 					}
-					Operazioni.clearConsole();
-					//System.out.println(risultato);
+					for(Dipendente dip : risultato.values()) {
+						System.out.println (dip.toString());							
+					}
 					break;
 				case 'u': // UPDATE
 					Operazioni.Update();

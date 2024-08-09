@@ -14,7 +14,8 @@ public class Dipendente {
 
 	}
 
-	public Dipendente(String nome, String cognome, String dob, String email, String numTel, String ruolo, boolean tester) {
+	public Dipendente(String nome, String cognome, String dob, String email, String numTel, String ruolo,
+			boolean tester) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dob = dob;
@@ -72,28 +73,21 @@ public class Dipendente {
 		return ruolo;
 	}
 
-	/*
-	 * public void setTester(String tester) {
-	 * this.tester = false;
-	 * if (tester.toLowerCase().equals("sì")) this.tester = true;
-	 * }
-	 */
-	public String getTester() {
-		if (this.tester) {
-			return ", ed è un tester";
-		} else
-			return " ";
+	public void toggleTester(boolean tester) {
+		if (tester)
+			this.tester = true;
+		else
+			this.tester = false;
 	}
 
-	public boolean getTesterBool() {
-		if (this.tester) {
-			return true;
-		} else
-			return false;
+	public boolean getTester() {
+		return tester;
 	}
 
 	@Override
 	public String toString() {
-		return ("Nome: " + this.getNome() + "\tCognome: " + this.getCognome() + "\tData di nascita: " + this.getDob() + "\tEmail: " + this.getEmail() + "\tNumero Telefonico: " + this.getNumTel() + "\truolo: " + this.getRuolo() + getTester());
+		return ("Name: " + this.getNome() + "\tSurname: " + this.getCognome() + "\tDate of birth: " + this.getDob()
+				+ "\tEmail: " + this.getEmail() + "\tPhone number: " + this.getNumTel() + "\tOccupation: "
+				+ this.getRuolo() + "\tTester: " + this.getTester());
 	}
 }

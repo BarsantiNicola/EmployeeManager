@@ -11,64 +11,92 @@ public class Operazioni {
 
 	public static void Add() {
 
-		System.out.print("Inserire il nome del dipendente:\t");
+		System.out.print("Type the employee's name:\t");
 		String nome = new String(scan.nextLine());
-		System.out.print("Inserire il cognome del dipendente:\t");
+		System.out.print("Type the employee's surname:\t");
 		String cognome = new String(scan.nextLine());
 
 		if (organico.containsKey(chiave(nome.toLowerCase(), cognome.toLowerCase()))) {
 			clearConsole();
-			System.out.println("Dipendente già presente");
+			System.out.println("This employee has already been registered");
 
 		} else {
 
-			System.out.print("Inserire la data di nascita:\t");
+			System.out.print("Type the employee's date of birth (dd/mm/yy):\t");
 			String dob = new String(scan.nextLine());
-			System.out.print("Inserire l'indirizzo email:\t");
+			System.out.print("Type the employee's email address:\t");
 			String email = new String(scan.nextLine());
-			System.out.print("Inserire il numero di telefono:\t");
+			System.out.print("Type the employee's phone number:\t");
 			String tel = new String(scan.nextLine());
-			System.out.print("Inserire il ruolo:\t");
+			System.out.print("Type the employee's occupation (manager, developer or human resources):\t");
 			String ruolo = new String(scan.nextLine());
-			System.out.print("Specificare se è un tester (sì/no):\t");
+			System.out.print("Is the employee a tester (yes/no)?:\t");
 			String t = new String(scan.nextLine());
 			boolean tester = false;
-			if (t.toLowerCase().equals("sì") || t.toLowerCase().equals("si"))
+			if (t.toLowerCase().equals("yes")) {
 				tester = true;
+			}
+			short id;
+			String reparto;
+
 			switch (ruolo) {
-			case "dirigente":
-				System.out.print("Inserire il reparto:\t");
-				String reparto = new String(scan.nextLine());
-				System.out.print("Inserire l'ID del team con cui lavora:\t");
-				short id = (short) scan.nextInt();
+			case "manager":
+				System.out.print("Type the employee's department:\t");
+				reparto = new String(scan.nextLine());
+				System.out.print("Type the employee's team ID:\t");
+				id = (short) scan.nextInt();
 				scan.nextLine();
-				System.out.print("Inserire l'indicatore di responsabilità [1,2,3]:\t");
+				System.out.print("Type the employee's responsibility level [1,2,3]:\t");
 				byte resp = (byte) scan.nextInt();
 				scan.nextLine();
-				Dirigente dir = new Dirigente(nome, cognome, dob, email, tel, ruolo, tester, reparto, id, resp);
+				Dirigente dir = new Dirigente(nome, cognome, dob, email, tel, ruolo, reparto, id, resp, tester);
 				organico.put(chiave(nome, cognome), dir);
+				clearConsole();
 				break;
-			case "sviluppatore":
-				System.out.print("Inserire il reparto:\t");
-				String repart = new String(scan.nextLine());
-				System.out.print("Inserire l'ID del team con cui lavora:\t");
-				short id1 = (short) scan.nextInt();
+			case "developer":
+				System.out.print("Type the employee's department:\t");
+				reparto = new String(scan.nextLine());
+				System.out.print("Type the employee's team ID:\t");
+				id = (short) scan.nextInt();
 				scan.nextLine();
-				System.out.print("Inserire il linguaggio di programmazione:\t");
+				System.out.print("Type the employee's known programming language:\t");
 				String linguaggio = new String(scan.nextLine());
-				Sviluppatore dev = new Sviluppatore(nome, cognome, dob, email, tel, ruolo, tester, repart, id1,
-						linguaggio);
+				Sviluppatore dev = new Sviluppatore(nome, cognome, dob, email, tel, ruolo, reparto, id, linguaggio,
+						tester);
 				organico.put(chiave(nome, cognome), dev);
+				clearConsole();
 				break;
-			case "risorse umane":
-				System.out.print("Inserire la mansione:\t");
+			case "human resources":
+				RisorseUmane hr;
+				System.out.print("Type the employee's task:\t");
 				String mansione = new String(scan.nextLine());
-				RisorseUmane hr = new RisorseUmane(nome, cognome, dob, email, tel, ruolo, tester, mansione);
+				if (tester) {
+					System.out.print("Type the employee's department:\t");
+					reparto = new String(scan.nextLine());
+					System.out.print("Type the employee's team ID:\t");
+					id = (short) scan.nextInt();
+					scan.nextLine();
+					hr = new RisorseUmane(nome, cognome, dob, email, tel, ruolo, mansione, reparto, id, tester);
+				} else {
+					hr = new RisorseUmane(nome, cognome, dob, email, tel, ruolo, mansione, tester);
+				}
 				organico.put(chiave(nome, cognome), hr);
+				clearConsole();
 				break;
 			default:
-				Dipendente dip = new Dipendente(nome, cognome, dob, email, tel, ruolo, tester);
-				organico.put(chiave(nome, cognome), dip);
+				if (tester) {
+					System.out.print("Type the employee's department:\t");
+					reparto = new String(scan.nextLine());
+					System.out.print("Type the employee's team ID:\t");
+					id = (short) scan.nextInt();
+					scan.nextLine();
+					Tester dip = new Tester(nome, cognome, dob, email, tel, ruolo, reparto, id, tester);
+					organico.put(chiave(nome, cognome), dip);
+				} else {
+					Dipendente dip = new Dipendente(nome, cognome, dob, email, tel, ruolo, tester);
+					organico.put(chiave(nome, cognome), dip);
+				}
+
 				clearConsole();
 				break;
 			}
@@ -77,21 +105,21 @@ public class Operazioni {
 	}
 
 	public static HashMap<String, Dipendente> Search(String query, HashMap<String, Dipendente> organico) {
-		
+
 		HashMap<String, Dipendente> result = new HashMap<String, Dipendente>();
 		boolean check = false;
 
 		if (organico.isEmpty()) {
 			clearConsole();
-			System.out.println("La lista è vuota");
+			System.out.println("The list is empty");
 
 		} else {
 
 			while (!check) {
 				switch (query.toLowerCase()) {
 
-				case "nome":
-					System.out.print("Digitare il nome:\t");
+				case "name":
+					System.out.print("Type the employee's name:\t");
 					String name = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -100,24 +128,21 @@ public class Operazioni {
 
 						}
 					}
-					// System.out.println(result);
 					check = true;
 					break;
-				case "cognome":
-					System.out.print("Digitare il cognome:\t");
+				case "surname":
+					System.out.print("Type the employee's surname:\t");
 					String surname = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
 						if (dip.getCognome().toLowerCase().equals(surname.toLowerCase())) {
-							// System.out.println(dip.toString());
 							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
 						}
 					}
-					// System.out.println(result);
 					check = true;
 					break;
-				case "data di nascita":
-					System.out.print("Digitare la data di nascita (gg/mm/yy):\t");
+				case "date of birth":
+					System.out.print("Type the employee's date of birth (dd/mm/yy):\t");
 					String dob = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -128,7 +153,7 @@ public class Operazioni {
 					check = true;
 					break;
 				case "email":
-					System.out.print("Digitare l'indirizzo email:\t");
+					System.out.print("Type the employee's email address:\t");
 					String email = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -138,8 +163,8 @@ public class Operazioni {
 					}
 					check = true;
 					break;
-				case "numero telefonico":
-					System.out.print("Digitare il numero telefonico:\t");
+				case "phone number":
+					System.out.print("Type the employee's phone number:\t");
 					String num = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -149,8 +174,8 @@ public class Operazioni {
 					}
 					check = true;
 					break;
-				case "ruolo":
-					System.out.print("Digitare il ruolo:\t");
+				case "occupation":
+					System.out.print("Type the employee's occupation (manager, developer or human resources):\t");
 					String ruolo = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -160,8 +185,8 @@ public class Operazioni {
 					}
 					check = true;
 					break;
-				case "reparto":
-					System.out.print("Digitare il reparto:\t");
+				case "department":
+					System.out.print("Type the employee's department:\t");
 					String reparto = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -175,12 +200,17 @@ public class Operazioni {
 							if (dev.getReparto().toLowerCase().equals(reparto.toLowerCase())) {
 								result.put(chiave(dev.getNome().toLowerCase(), dev.getCognome().toLowerCase()), dev);
 							}
+						} else if (dip instanceof Tester) {
+							Tester test = (Tester) dip;
+							if (test.getReparto().toLowerCase().equals(reparto.toLowerCase())) {
+								result.put(chiave(test.getNome().toLowerCase(), test.getCognome().toLowerCase()), test);
+							}
 						}
 					}
 					check = true;
 					break;
-				case "id team":
-					System.out.print("Digitare l'identificativo del team:\t");
+				case "team id":
+					System.out.print("Type the employee's team ID:\t");
 					short id = (short) scan.nextInt();
 					scan.nextLine();
 					clearConsole();
@@ -195,12 +225,17 @@ public class Operazioni {
 							if (dev.getIDTeam() == id) {
 								result.put(chiave(dev.getNome().toLowerCase(), dev.getCognome().toLowerCase()), dev);
 							}
+						} else if (dip instanceof Tester) {
+							Tester test = (Tester) dip;
+							if (test.getIDTeam() == id) {
+								result.put(chiave(test.getNome().toLowerCase(), test.getCognome().toLowerCase()), test);
+							}
 						}
 					}
 					check = true;
 					break;
-				case "responsabilità":
-					System.out.print("Digitare il grado di responsabilità:\t");
+				case "responsibility":
+					System.out.print("Type the employee's responsibility level [1,2,3]:\t");
 					byte resp = (byte) scan.nextInt();
 					scan.nextLine();
 					clearConsole();
@@ -214,8 +249,8 @@ public class Operazioni {
 					}
 					check = true;
 					break;
-				case "linguaggio":
-					System.out.print("Digitare il linguaggio di programmazione:\t");
+				case "language":
+					System.out.print("Type the employee's known programming language:\t");
 					String linguaggio = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -228,8 +263,8 @@ public class Operazioni {
 					}
 					check = true;
 					break;
-				case "mansione":
-					System.out.print("Digitare la mansione:\t");
+				case "task":
+					System.out.print("Type the employee's task:\t");
 					String mansione = scan.nextLine();
 					clearConsole();
 					for (Dipendente dip : organico.values()) {
@@ -243,41 +278,53 @@ public class Operazioni {
 					check = true;
 					break;
 
+				case "tester":
+					for (Dipendente dip : organico.values()) {
+						if (dip.getTester()) {
+							result.put(chiave(dip.getNome().toLowerCase(), dip.getCognome().toLowerCase()), dip);
+						}
+					}
+					check = true;
+					break;
+
 				default:
-					System.out.println("Input non corretto, riprovare\n");
+					System.out.println("The input was not correct, retry\n");
 					break;
 				}
-			}
+				break;// FINE SWITCH
+			} // FINE WHILE
 		}
-		System.out.println(organico);
-		System.out.println(result);
 		return result;
 	}
 
 	public static void Update() {
+
+		String reparto = new String();
+		short id;
+
 		if (organico.isEmpty()) {
 			clearConsole();
-			System.out.println("La lista è vuota");
+			System.out.println("The list is empty");
 
 		} else {
 
-			String check = new String("sì");
-			System.out.print(
-					"Immettere nome e cognome separati da uno spazio dell'impiegato del quale si vogliono modificare i dati:\t");
+			String check = new String("yes");
+			System.out.print("Type the employee's name and surname with a space in between:\t");
 			String key = scan.nextLine();
+			clearConsole();
 			if (organico.containsKey(key)) {
 
 				do {
 
 					System.out.println("\n" + organico.get(key).toString() + "\n");
 					System.out.println(
-							"Immettere l'attributo da modificare fra:\n Nome\t\tCognome\t\tData di nascita\t\tEmail\t\tNumero telefonico\t\tRuolo");
+							"Type the attribute to edit:\n Name\t\tSurname\t\tDate of birth\t\tEmail\t\tPhone number\t\tOccupation\t\tTester\t\tOccupation");
 					String query = scan.nextLine();
 
 					switch (query.toLowerCase()) {
 
-					case "nome":
-						System.out.print("Digitare il nome:\t");
+					case "name":
+						System.out.print("Type the employee's name:\t");
 						String name = scan.nextLine();
 						String prevKey = new String(key);
 						organico.get(prevKey).setNome(name);
@@ -286,8 +333,8 @@ public class Operazioni {
 						organico.remove(prevKey);
 						break;
 
-					case "cognome":
-						System.out.print("Digitare il cognome:\t");
+					case "surname":
+						System.out.print("Type the employee's surname:\t");
 						String surname = scan.nextLine();
 						prevKey = new String(key);
 						organico.get(prevKey).setCognome(surname);
@@ -296,71 +343,96 @@ public class Operazioni {
 						organico.remove(prevKey);
 						break;
 
-					case "data di nascita":
-						System.out.print("Digitare la data di nascita (gg/mm/yy):\t");
+					case "date of birth":
+						System.out.print("Type the employee's date of birth (dd/mm/yy):\t");
 						String dob = scan.nextLine();
 						organico.get(key).setDob(dob);
 						break;
 
 					case "email":
-						System.out.print("Digitare l'indirizzo email:\t");
+						System.out.print("Type the employee's email address:\t");
 						String email = scan.nextLine();
 						organico.get(key).setEmail(email);
 						break;
 
-					case "numero telefonico":
-						System.out.print("Digitare il numero telefonico:\t");
+					case "phone number":
+						System.out.print("Type the employee's phone number:\t");
 						String num = scan.nextLine();
 						organico.get(key).setNumTel(num);
 						break;
 
-					case "ruolo":
-						System.out.print("Digitare il ruolo:\t");
+					case "tester":
+						System.out.print("Is the employee a tester (yes/no):\t");
+						String t = scan.nextLine();
+						if (t.toLowerCase().equals("yes")) {
+							if (organico.get(key).getTester()) {
+								System.out.println("The employee is already a tester");
+							} else
+								organico.get(key).toggleTester(true);
+						} else
+							organico.get(key).toggleTester(false);
+
+						break;
+
+					case "occupation":
+						System.out.print("Type the employee's occupation:\t");
 						String ruolo = scan.nextLine();
 						organico.get(key).setRuolo(ruolo);
 
 						switch (ruolo) {
 
-						case "dirigente":
-							System.out.print("Inserire il reparto:\t");
-							String reparto = new String(scan.nextLine());
-							System.out.print("Inserire l'ID del team con cui lavora:\t");
-							short id = (short) scan.nextInt();
+						case "manager":
+							System.out.print("Type the employee's department:\t");
+							reparto = new String(scan.nextLine());
+							System.out.print("Type the employee's team ID:\t");
+							id = (short) scan.nextInt();
 							scan.nextLine();
-							System.out.print("Inserire l'indicatore di responsabilità [1,2,3]:\t");
+							System.out.print("Type the employee's responsibility level [1,2,3]:\t");
 							byte resp = (byte) scan.nextInt();
 							scan.nextLine();
 							Dirigente dir = new Dirigente(organico.get(key).getNome(), organico.get(key).getCognome(),
 									organico.get(key).getDob(), organico.get(key).getEmail(),
-									organico.get(key).getNumTel(), ruolo, organico.get(key).getTesterBool(), reparto,
-									id, resp);
+									organico.get(key).getNumTel(), ruolo, reparto, id, resp,
+									organico.get(key).getTester());
 							organico.remove(key);
 							organico.put(chiave(dir.getNome(), dir.getCognome()), dir);
 							break;
 
-						case "sviluppatore":
-							System.out.print("Inserire il reparto:\t");
-							String reparto1 = new String(scan.nextLine());
-							System.out.print("Inserire l'ID del team con cui lavora:\t");
-							short id1 = (short) scan.nextInt();
+						case "developer":
+							System.out.print("Type the employee's department:\t");
+							reparto = new String(scan.nextLine());
+							System.out.print("Type the employee's team ID:\t");
+							id = (short) scan.nextInt();
 							scan.nextLine();
-							System.out.print("Inserire il linguaggio di programmazione:\t");
+							System.out.print("Type the employee's known programming language:\t");
 							String linguaggio = new String(scan.nextLine());
 							Sviluppatore dev = new Sviluppatore(organico.get(key).getNome(),
 									organico.get(key).getCognome(), organico.get(key).getDob(),
-									organico.get(key).getEmail(), organico.get(key).getNumTel(), ruolo,
-									organico.get(key).getTesterBool(), reparto1, id1, linguaggio);
+									organico.get(key).getEmail(), organico.get(key).getNumTel(), ruolo, reparto, id,
+									linguaggio, organico.get(key).getTester());
 							organico.remove(key);
 							organico.put(chiave(dev.getNome(), dev.getCognome()), dev);
 							break;
 
-						case "risorse umane":
-							System.out.print("Inserire La mansione:\t");
+						case "human resources":
+							RisorseUmane hr;
+							System.out.print("Type the employee's task:\t");
 							String mansione = new String(scan.nextLine());
-							RisorseUmane hr = new RisorseUmane(organico.get(key).getNome(),
-									organico.get(key).getCognome(), organico.get(key).getDob(),
-									organico.get(key).getEmail(), organico.get(key).getNumTel(), ruolo,
-									organico.get(key).getTesterBool(), mansione);
+							System.out.print("Type the employee's department:\t");
+							reparto = new String(scan.nextLine());
+							System.out.print("Type the employee's team ID:\t");
+							id = (short) scan.nextInt();
+							scan.nextLine();
+							if (organico.get(key).getTester()) {
+								hr = new RisorseUmane(organico.get(key).getNome(), organico.get(key).getCognome(),
+										organico.get(key).getDob(), organico.get(key).getEmail(),
+										organico.get(key).getNumTel(), ruolo, mansione, reparto, id,
+										organico.get(key).getTester());
+							} else {
+								hr = new RisorseUmane(organico.get(key).getNome(), organico.get(key).getCognome(),
+										organico.get(key).getDob(), organico.get(key).getEmail(),
+										organico.get(key).getNumTel(), ruolo, mansione, organico.get(key).getTester());
+							}
 							organico.remove(key);
 							organico.put(chiave(hr.getNome(), hr.getCognome()), hr);
 							break;
@@ -368,32 +440,35 @@ public class Operazioni {
 						default:
 							Dipendente dip = new Dipendente(organico.get(key).getNome(), organico.get(key).getCognome(),
 									organico.get(key).getDob(), organico.get(key).getEmail(),
-									organico.get(key).getNumTel(), ruolo, organico.get(key).getTesterBool());
+									organico.get(key).getNumTel(), ruolo, organico.get(key).getTester());
 							organico.remove(key);
 							organico.put(chiave(dip.getNome(), dip.getCognome()), dip);
 						}
 						break;
 					default:
 						clearConsole();
-						System.out.println("Input non corretto, riprovare");
+						System.out.println("The input was not correct, retry\n");
+						// break;
 					}
-					System.out.println("Effettuare una nuova modifica?");
+					System.out.print("Keep editing the data?\t");
 					check = new String(scan.nextLine());
-				} while (check.toLowerCase().equals("sì") | check.toLowerCase().equals("si"));
-
+					clearConsole();
+				} while (check.toLowerCase().equals("yes"));
+			} else {
+				clearConsole();
+				System.out.println("Employee not found");
 			}
-			clearConsole();
 		}
 	}
 
 	public static void Delete() {
-		System.out.print("Digitare il nome e il cognome del dipendente da eliminare separati da uno spazio:\t");
+		System.out.print("Type the employee's name and surname with a space in between:\t");
 		String k = scan.nextLine().toLowerCase();
 		if (organico.containsKey(k)) {
 			organico.remove(k);
 			clearConsole();
 		} else
-			System.out.println("Il dipendente non esiste");
+			System.out.println("Employee not found");
 	}
 
 	public static String chiave(String nome, String cognome) {
@@ -409,4 +484,5 @@ public class Operazioni {
 	public static HashMap<String, Dipendente> getOrganico() {
 		return organico;
 	}
+
 }
